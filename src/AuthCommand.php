@@ -116,7 +116,7 @@ class AuthCommand extends Command
         );
 
         copy(
-            __DIR__.'/../stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
+            __DIR__.'/stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
             base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php')
         );
     }
@@ -133,5 +133,18 @@ class AuthCommand extends Command
             $this->laravel->getNamespace(),
             file_get_contents(__DIR__.'/stubs/controllers/HomeController.stub')
         );
+    }
+
+    /**
+     * Get full view path relative to the application's configured view path.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    protected function getViewPath($path)
+    {
+        return implode(DIRECTORY_SEPARATOR, [
+            config('view.paths')[0] ?? resource_path('views'), $path,
+        ]);
     }
 }
