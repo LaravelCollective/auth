@@ -12,7 +12,7 @@ class AuthCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:auth';
+    protected $signature = 'make:auth {--force : Overwrite existing views by default}';
 
     /**
      * The console command description.
@@ -27,14 +27,14 @@ class AuthCommand extends Command
      * @var array
      */
     protected $views = [
-        // 'auth/login.stub' => 'auth/login.blade.php',
-        // 'auth/passwords/confirm.stub' => 'auth/passwords/confirm.blade.php',
-        // 'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
-        // 'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
-        // 'auth/register.stub' => 'auth/register.blade.php',
-        // 'auth/verify.stub' => 'auth/verify.blade.php',
-        // 'home.stub' => 'home.blade.php',
-        // 'layouts/app.stub' => 'layouts/app.blade.php',
+        'auth/login.stub' => 'auth/login.blade.php',
+        'auth/passwords/confirm.stub' => 'auth/passwords/confirm.blade.php',
+        'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
+        'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
+        'auth/register.stub' => 'auth/register.blade.php',
+        'auth/verify.stub' => 'auth/verify.blade.php',
+        'home.stub' => 'home.blade.php',
+        'layouts/app.stub' => 'layouts/app.blade.php',
     ];
 
     /**
@@ -46,9 +46,48 @@ class AuthCommand extends Command
      */
     public function handle()
     {
+        $this->ensureDirectoriesExist();
+        $this->exportViews();
         $this->exportBackend();
 
         $this->info('Authentication scaffolding generated successfully.');
+    }
+
+    /**
+     * Create the directories for the files.
+     *
+     * @return void
+     */
+    protected function ensureDirectoriesExist()
+    {
+        if (! is_dir($directory = $this->getViewPath('layouts'))) {
+            mkdir($directory, 0755, true);
+        }
+
+        if (! is_dir($directory = $this->getViewPath('auth/passwords'))) {
+            mkdir($directory, 0755, true);
+        }
+    }
+
+    /**
+     * Export the views
+     *
+     * @return void
+     */
+    public function exportViews()
+    {
+        foreach ($this->views as $key => $value) {
+            if (file_exists($view = $this->getViewPath($value)) && ! $this->option('force')) {
+                if (! $this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
+                    continue;
+                }
+            }
+
+            copy(
+                __DIR__.'/stubs/views/'.$key,
+                $view
+            );
+        }
     }
 
     /**
@@ -72,7 +111,7 @@ class AuthCommand extends Command
 
         file_put_contents(
             base_path('routes/web.php'),
-            file_get_contents(__DIR__.'/Auth/stubs/routes.stub'),
+            file_get_contents(__DIR__.'/stubs/routes.stub'),
             FILE_APPEND
         );
 
@@ -92,7 +131,7 @@ class AuthCommand extends Command
         return str_replace(
             '{{namespace}}',
             $this->laravel->getNamespace(),
-            file_get_contents(__DIR__.'/Auth/stubs/controllers/HomeController.stub')
+            file_get_contents(__DIR__.'/stubs/controllers/HomeController.stub')
         );
     }
 }
