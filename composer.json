@@ -34,7 +34,7 @@
         },
         "laravel": {
             "providers": [
-                "Collective\\Auth\\AuthServiceProvider"
+                "Collective\\Auth\\CollectiveAuthServiceProvider"
             ]
         }
     },
