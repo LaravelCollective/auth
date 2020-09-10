@@ -1,0 +1,43 @@
+{
+    "name": "laravelcollective/auth",
+    "description": "Auth backend and Controller stubs for the Laravel Framework",
+    "license": "MIT",
+    "homepage": "https://laravelcollective.com",
+    "support": {
+        "issues": "https://github.com/LaravelCollective/auth/issues",
+        "source": "https://github.com/LaravelCollective/auth"
+    },
+    "authors": [
+        {
+            "name": "Matt Lantz",
+            "email": "matt@laravelcollective.com"
+        },
+        {
+            "name": "Taylor Otwell",
+            "email": "taylorotwell@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.5",
+        "illuminate/support": "^7.0|^8.0",
+        "illuminate/console": "^7.0|^8.0",
+        "illuminate/filesystem": "^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Collective\\Auth\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Collective\\Auth\\AuthServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
