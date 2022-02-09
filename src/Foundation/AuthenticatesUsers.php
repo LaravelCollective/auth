@@ -3,7 +3,7 @@
 namespace Collective\Auth\Foundation;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Collective\Auth\Foundation\RedirectsUsers;
 use Illuminate\Validation\ValidationException;
@@ -46,6 +46,10 @@ trait AuthenticatesUsers
         }
 
         if ($this->attemptLogin($request)) {
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+
             return $this->sendLoginResponse($request);
         }
 
@@ -82,7 +86,8 @@ trait AuthenticatesUsers
     protected function attemptLogin(Request $request)
     {
         return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $this->credentials($request),
+            $request->filled('remember')
         );
     }
 
@@ -114,7 +119,7 @@ trait AuthenticatesUsers
         }
 
         return $request->wantsJson()
-                    ? new Response('', 204)
+                    ? new JsonResponse([], 204)
                     : redirect()->intended($this->redirectPath());
     }
 
@@ -174,7 +179,7 @@ trait AuthenticatesUsers
         }
 
         return $request->wantsJson()
-            ? new Response('', 204)
+            ? new JsonResponse([], 204)
             : redirect('/');
     }
 

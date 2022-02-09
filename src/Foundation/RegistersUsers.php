@@ -4,7 +4,7 @@ namespace Collective\Auth\Foundation;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 trait RegistersUsers
@@ -40,7 +40,7 @@ trait RegistersUsers
         }
 
         return $request->wantsJson()
-                    ? new Response('', 201)
+                    ? new JsonResponse([], 201)
                     : redirect($this->redirectPath());
     }
 
