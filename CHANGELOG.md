@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v1.1.2] - 2022-03-22
+
+### Fixed
+- Issue with missing password validate rule
+
 ## [v1.1.1] - 2022-02-15
 
 ### Fixed
