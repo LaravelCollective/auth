@@ -43,5 +43,6 @@
         }
     },
     "minimum-stability": "dev",
+    "abandoned": "laravel/ui",
     "prefer-stable": true
 }
